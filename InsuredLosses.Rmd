@@ -1,0 +1,29 @@
+---
+title: "Week 3 Assignment"
+author: "SJ Raad"
+date: "12/15/2016"
+output: ioslides_presentation
+css: style.css
+---
+
+## Worldwide Insured Losses
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(plotly)
+library(tidyr)
+library(dplyr)
+
+InsData <- read.csv(file="insuredlosses.csv", header = TRUE)
+
+InsLosses <- gather(InsData[, 2:5])
+colnames(InsLosses) <- c("Event", "Loss Amount")
+InsLosses = mutate(InsLosses, Year = rep(InsData$Year, 4))
+
+Legend <- list(font = list(size=10), orientation = 'h')
+
+plot_ly(InsLosses, x = InsLosses$Year, y = InsLosses$`Loss Amount`) %>%
+    add_trace(color = InsLosses$Event, mode = 'line+markers') %>%
+    layout(yaxis = list(title = 'Losses in Usd bn'), legend = Legend)
+```
+<br>
+*Source: sigma world insurance database - Swiss Re Economic Research & Consulting*
